@@ -1,8 +1,7 @@
-from flask import Flask
-from api_util import get_user_data, get_roster, get_players
+from api_util import get_user_data, get_roster, get_players, today
 from models import db, User, Roster, Players
 from app import app  # Import the app instance
-import json
+
 
 
 # Function takes response from API call in api_util for getting user data and updates database table.
@@ -77,31 +76,30 @@ def pop_player_data():
   with app.app_context():
     #json_response_path='player_data.json'
     #with open(json_response_path, 'r') as file:
-     player_data = get_players()
+    player_data = get_players()
+  if player_data is None:
+    print('No player data was returned.')
+  if player_data == today:
+     return print('Data has already been updated today.')
+  else:
      # Purge all database records before writing the updates.
      db.session.query(Players).delete()
      db.session.commit()
-     if player_data is None:
+    # if player_data is None:
             # Handle the case where get_players() returns None
-            print("Error: get_players() returned None")
-            return
+        #    print("Error: get_players() returned None")
+         #   return
 
      for player_record in player_data:
       # Check if player is active and not a defense... if so add to the players table
-      if player_record.isnumeric() and player_data[player_record]['status'] != 'Inactive':
+      if player_record.isnumeric() and player_data[player_record]['active'] == True:
        player_id = player_data[player_record]['player_id']
        first_name = player_data[player_record]['first_name']
        last_name = player_data[player_record]['last_name']
        injury_status = player_data[player_record]['injury_status']
-       #print(first_name, last_name, injury_status)
+       injury_body_part = player_data[player_record]['injury_body_part']
+       injury_notes = player_data[player_record]['injury_notes']
     # Because we want this to be updated everytime whether the player already exists or not, we are not checking to see if this player exists.
-       player = Players(player_id=player_id, first_name=first_name, last_name=last_name, injury_status=injury_status)
+       player = Players(player_id=player_id, first_name=first_name, last_name=last_name, injury_status=injury_status, injury_body_part=injury_body_part, injury_notes=injury_notes )
        db.session.add(player)
        db.session.commit()
-
-
-get_my_user_data()
-
-get_my_roster_data()
-
-pop_player_data()

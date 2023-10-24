@@ -1,0 +1,29 @@
+html{
+    background-color: black;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: chartreuse;
+}
+
+h1{
+    text-align: center;
+}
+
+li{
+    
+    list-style-type: none;
+}
+
+.player-list{
+    margin-top: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    border: solid 5px;
+    border-radius: 7px;
+    max-width: 40rem;
+}
+
+#player-bottom-line{
+    margin-bottom: 15px;
+    width: 20rem;
+    border-bottom: solid 2px;
+}

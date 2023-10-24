@@ -2,8 +2,11 @@ import os
 import requests, json
 import datetime
 
+# Get the directory of the current script
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 
+# Current today used to check date before running API call
 current_day = datetime.datetime.now() 
 today = current_day.strftime("%b") + ' ' + current_day.strftime("%d")
 
@@ -38,24 +41,29 @@ def get_roster():
 # Function used to populate database from sleeper api, NON inactive players only.
 def get_players():
  # Path to file where we will store the last date this function was ran to avoid running function more than once per day.
- date_file_path = 'last_updated_date.txt'
+ date_file_path = os.path.join(script_dir, 'last_updated_date.txt')
  json_response_path='player_data.json'
  # Check day of the week.
  if os.path.exists(date_file_path):
     with open(date_file_path, 'r') as file:
      stored_date = file.read()
+     print('Stored date is ' + stored_date)
      # compare file to today's day value if it's not the same run the code.
      if today != stored_date:
         api_url="https://api.sleeper.app/v1/players/nfl"
-    # If we get OK response pass data to the main app function to populate player db
+     # If we get OK response pass data to the main app function to populate player db
         response = requests.get(api_url)
         if response.status_code==200:
-            with open(date_file_path, 'w') as file:
-               file.write(today)
-            #with open(json_response_path, 'w') as file:
+         with open(date_file_path, 'w') as file:
+             file.write(today)
+           # with open(json_response_path, 'w') as file:
               # file.write(str(response.json()))
-            return response.json()
-        print('Updated Players database successfully.')
+         print('Updated Players database successfully.')
+         return response.json()
+        else:
+            print(f'Failed to fetch data from API. Status code: {response.status_code}')
+            return None
      else:
-         print('Already retrieved up to date data.')
-            
+      print('Already updated player data.')
+      return today
+

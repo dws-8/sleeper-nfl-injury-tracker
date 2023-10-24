@@ -29,8 +29,8 @@ class Players(db.Model):
     first_name = db.Column(db.String(80), index=True)
     last_name = db.Column(db.String(80), index=True)
     injury_status = db.Column(db.String(50), index=True)
+    injury_body_part = db.Column(db.String(50), index=True)
+    injury_notes = db.Column(db.String(50), index=True)
     
     def __repr__(self):
         return "{}".format(self.player_id)
-
-# Use an inner join query to populate from roster and players table. Display list using an HTML template.
