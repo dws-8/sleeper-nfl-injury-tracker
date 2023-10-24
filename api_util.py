@@ -42,7 +42,6 @@ def get_roster():
 def get_players():
  # Path to file where we will store the last date this function was ran to avoid running function more than once per day.
  date_file_path = os.path.join(script_dir, 'last_updated_date.txt')
- json_response_path='player_data.json'
  # Check day of the week.
  if os.path.exists(date_file_path):
     with open(date_file_path, 'r') as file:
@@ -56,8 +55,6 @@ def get_players():
         if response.status_code==200:
          with open(date_file_path, 'w') as file:
              file.write(today)
-           # with open(json_response_path, 'w') as file:
-              # file.write(str(response.json()))
          print('Updated Players database successfully.')
          return response.json()
         else:
