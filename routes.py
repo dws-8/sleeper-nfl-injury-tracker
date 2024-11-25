@@ -4,7 +4,7 @@ from models import Roster, Players
 from flask import render_template, url_for, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 
-
+# present injury report if there are injured players on my roster
 @app.route('/injury_report')
 def injury_report():
 
